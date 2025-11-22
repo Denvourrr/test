@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,23 +10,29 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh;
+        margin: 0;
         background: #000;
         color: #fff;
-        font-family: Arial;
+        font-family: Arial, sans-serif;
     }
 
     .container {
         text-align: center;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        box-sizing: border-box;
     }
 
     canvas {
-        background: transparent;
+        width: 100%;
+        height: auto;
     }
 
     .label {
-        margin-top: 20px;
-        font-size: 22px;
+        margin-top: 18px;
+        font-size: 20px;
         font-weight: 600;
     }
 </style>
@@ -36,7 +40,7 @@
 <body>
 
 <div class="container">
-    <canvas id="pie" width="320" height="320"></canvas>
+    <canvas id="pie" width="350" height="350"></canvas>
     <div class="label" id="label"></div>
 </div>
 
@@ -61,7 +65,7 @@ function animateSlice() {
 
     let slice = slices[currentSlice];
     let targetAngle = (slice.value / total) * (2 * Math.PI);
-    let speed = 0.02; // smoother speed
+    let speed = 0.018; // Smooth animation
     
     let draw = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -73,15 +77,20 @@ function animateSlice() {
             start += (slices[i].value / total) * (2 * Math.PI);
         }
 
-        // Current slice (animated)
+        // Current slice animation
         ctx.beginPath();
-        ctx.moveTo(160, 160);
+        ctx.moveTo(canvas.width/2, canvas.height/2);
         ctx.fillStyle = slice.color;
 
-        ctx.arc(160, 160, 140, start, start + currentAngle);
+        ctx.arc(
+            canvas.width/2,
+            canvas.height/2,
+            150,
+            start,
+            start + currentAngle
+        );
         ctx.fill();
 
-        // Label set
         document.getElementById("label").innerText =
             `${slice.label} - ${Math.round((currentAngle / targetAngle) * slice.value)}%`;
 
@@ -94,7 +103,7 @@ function animateSlice() {
             document.getElementById("label").innerText =
                 `${slice.label} - ${slice.value}%`;
 
-            setTimeout(animateSlice, 700);
+            setTimeout(animateSlice, 600);
         }
     };
 
@@ -103,11 +112,11 @@ function animateSlice() {
 
 function drawFullSlice(slice, startAngle) {
     ctx.beginPath();
-    ctx.moveTo(160, 160);
+    ctx.moveTo(canvas.width/2, canvas.height/2);
     ctx.fillStyle = slice.color;
 
     let endAngle = startAngle + (slice.value / total) * (2 * Math.PI);
-    ctx.arc(160, 160, 140, startAngle, endAngle);
+    ctx.arc(canvas.width/2, canvas.height/2, 150, startAngle, endAngle);
     ctx.fill();
 }
 
@@ -116,3 +125,4 @@ animateSlice();
 
 </body>
 </html>
+
